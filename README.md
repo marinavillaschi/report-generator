@@ -1,10 +1,10 @@
 # Report Generator Project
 
-Generating reports on a schedule is a reality for many industries. This is a repetitive task that can be time consuming and subject to human error.
+Generating reports on a schedule is a need for many industries. It's a repetitive task that can be time consuming and subject to human error.
 
 This is the problem I'm gonna be solving with this project.
 
-Automating report generation will save employees time and assure all reports are produced the same safe and tested way avoiding human error and guaranteeing data and report quality.
+Automating report generation saves employees time and assures all reports are produced the same safe and tested way avoiding human error and guaranteeing data and report quality. This way the employees can focus their time and attention on other more important matters.
 
 ## Table of contents:
 
@@ -17,17 +17,17 @@ Automating report generation will save employees time and assure all reports are
 ## Project Description <a name="description"></a>
 
 This project has two main cores:
-- [Report Generator API](#api)
-- [Serverless Lambda service](#lambda)
+- [Cron based data fetcher lambda service](#cron)
+- [Event based report generator lambda service](#event)
 
-### Report Generator API <a name="api"></a>
+### Cron based data fetcher lambda service <a name="cron"></a>
 
-Gathers data from a database / datalake / external API and processes it in order to generate a final .csv file that is then delivered to the end user as an upload to a remote server through SFTP protocol.
+AWS Lambda service that runs on a schedule to fetch data from external API and upload it to an S3 data lake landing zone.
 
 
-### Serverless Lambda service <a name="lambda"></a>
+### Event based report generator lambda service <a name="event"></a>
 
-AWS Lambda service that runs on a schedule to make automated Report Generator API request to ensure the final user gets the report on the agreed schedule.
+AWS Lambda service that runs based on the event of new data landing on an S3 data lake zone to generate a report and send it as an email to the person of interest.
 
 
 <!-- ### Passo a passo do serviço:

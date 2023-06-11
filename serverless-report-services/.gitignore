@@ -1,6 +1,0 @@
-venv
-.aws-sam
-*samconfig.toml
-.env
-*.ipynb
-__pycache__
