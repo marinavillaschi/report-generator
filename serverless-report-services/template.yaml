@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Serverless Report Service
+
+Globals:
+  Function:
+    Runtime: python3.9
+
+Parameters:
+  ApiUrl:
+    NoEcho: true
+    Type: String
+    Description: "REQUIRED: External API url for making requests"
+
+Resources:
+  CronFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Makes an API request on a schedule and uploads data to S3
+      CodeUri: functions/cron/
+      Handler: data_fetcher.lambda_handler
+      Timeout: 60
+      Events:
+        DailySchedule:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 8 * * ? *) # every day at 5am
+            Name: every-day-5am
+      Environment:
+        Variables:
+          API_URL: !Ref ApiUrl
