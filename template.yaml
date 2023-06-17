@@ -13,6 +13,10 @@ Parameters:
     Type: String
     Description: "REQUIRED: External API url for making requests"
 
+  LakeBucketName:
+    Type: String
+    Description: "REQUIRED: Lake Bucket name"
+
 Resources:
   CronFunction:
     Type: AWS::Serverless::Function
@@ -30,3 +34,18 @@ Resources:
       Environment:
         Variables:
           API_URL: !Ref ApiUrl
+          LAKE_BUCKET_NAME: !Ref LakeBucketName
+      Policies:
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:PutObject
+            Resource:
+              !Sub
+                - "arn:aws:s3:::${BucketName}/*"
+                - {BucketName: !Ref LakeBucketName}
+
+  LakeBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref LakeBucketName
