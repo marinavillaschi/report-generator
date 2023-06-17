@@ -49,3 +49,35 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref LakeBucketName
+
+
+  S3Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Reads new data from S3 and generates report to send as email
+      CodeUri: functions/s3/
+      Handler: main.lambda_handler
+      Timeout: 60
+      Events:
+        FileUploadToS3:
+          Type: S3
+          Properties:
+            Bucket: !Ref LakeBucket
+            Events: s3:ObjectCreated:*
+            Filter: 
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: '.json'
+      Environment:
+        Variables:
+          LAKE_BUCKET_NAME: !Ref LakeBucketName
+      Policies:
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+            Resource:
+              !Sub
+                - "arn:aws:s3:::${BucketName}/*"
+                - {BucketName: !Ref LakeBucketName}
