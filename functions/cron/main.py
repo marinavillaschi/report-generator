@@ -16,10 +16,11 @@ def lambda_handler(event, context):
         coins_marked_data = api_requester.get_coins_market_data()
         coins_marked_data = coins_marked_data.json()
 
-    except:
+    except Exception as e:
         raise Exception({
             "statusCode": 500,
-            "body": json.dumps("FAILED making API request"),
+            "body": "FAILED making API request",
+            "error": e
         })
 
 
