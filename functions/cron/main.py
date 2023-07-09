@@ -27,6 +27,13 @@ def lambda_handler(event, context):
 
     print(f"got {len(coins_marked_data)} coin market data successfully")
 
+    #TODO
+    # call upload_to_s3 for each data point so the schema makes sense
+    # or upload data as csv or parquet
+
+    # for data in coins_marked_data:
+        
+
     try:
         response_date = s3_uploader.upload_to_s3(
             LAKE_BUCKET_NAME,

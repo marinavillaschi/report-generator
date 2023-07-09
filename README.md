@@ -17,17 +17,26 @@ Automating report generation saves employees time and assures all reports are pr
 ## Project Description <a name="description"></a>
 
 This project has two main cores:
-- [Cron based data fetcher lambda service](#cron)
-- [Event based report generator lambda service](#event)
 
-### Cron based data fetcher lambda service <a name="cron"></a>
+### 1. Cron based data fetcher lambda service
 
 AWS Lambda service that runs on a schedule to fetch data from external API and upload it to an S3 data lake landing zone.
 
-
-### Event based report generator lambda service <a name="event"></a>
+### 2. Event based report generator lambda service
 
 AWS Lambda service that runs based on the event of new data landing on an S3 data lake zone to generate a report and send it as an email to the person of interest.
+
+### TODO:
+
+- Call s3 uploader in lambda1 for each datapoint for a better glue database schema
+
+- Evaluate the need for the lambda2: it may be replaced by the glue services
+
+- Create glue crawler to run everytime new data comes in S3 to create/update glue database
+
+- Set up Athena for reading data from S3 using database created by crawler
+
+- Create dashboard to feed from data using Athena
 
 
 <!-- ### Passo a passo do serviço:
@@ -58,7 +67,7 @@ This project is composed of the following steps:
 ## Installation <a name="installation"></a>
 
 --
-(insert instalation instructions)
+
 
 <!-- There's no need to install any libraries to run this code on the Anaconda environment. The code should run with no issues using Python versions 3.*. -->
 
@@ -66,7 +75,7 @@ This project is composed of the following steps:
 ## Results <a name="results"></a>
 
 --
-(insert final thoughts here)
+
 <!-- Each notebook holds one step of the project. They were developed with markdown cells in such a way that it's easy to follow and the conclusions are drawn as it goes.
 
 Also, a blog post of the finding is available [here](https://pandascouple.medium.com/how-to-power-customer-acquisition-marketing-campaings-8ea879f41eca). -->
@@ -78,9 +87,5 @@ Also, a blog post of the finding is available [here](https://pandascouple.medium
 
 ## Acknowledgements <a name="acknowledgements"></a>
 
---
-(make acknowledgement to the dataset used)
+[CoinGecko API](https://www.coingecko.com/pt/api) for the data provided.
 
-<!-- [Arvato Financial Solutions](https://www.bertelsmann.com/divisions/arvato/) for providing the data.
-
-[Udacity](https://www.udacity.com/) as this project was developed during the Data Science Nanodegree Program. -->
