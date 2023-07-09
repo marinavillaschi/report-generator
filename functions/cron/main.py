@@ -5,6 +5,7 @@ from datetime import date
 from services import api_requester, s3_uploader
 
 LAKE_BUCKET_NAME = config("LAKE_BUCKET_NAME")
+MARKET_CATEGORY = config("MARKET_CATEGORY")
 
 
 def lambda_handler(event, context):
@@ -13,13 +14,14 @@ def lambda_handler(event, context):
     print("Attempting to fetch data from coingecko API")
 
     try:
-        coins_marked_data = api_requester.get_coins_market_data()
+        coins_marked_data = api_requester.get_coins_market_data(vs_currency="USD", category=MARKET_CATEGORY)
         coins_marked_data = coins_marked_data.json()
 
-    except:
+    except Exception as e:
         raise Exception({
             "statusCode": 500,
-            "body": json.dumps("FAILED making API request"),
+            "body": "FAILED making API request",
+            "error": e
         })
 
 
@@ -28,7 +30,7 @@ def lambda_handler(event, context):
     try:
         response_date = s3_uploader.upload_to_s3(
             LAKE_BUCKET_NAME,
-            f"raw/{str(date.today())}/coins_market_data.json",
+            f"raw/coins_market_data/{MARKET_CATEGORY}/{str(date.today())}.json",
             coins_marked_data
         )
 
