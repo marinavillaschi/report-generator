@@ -16,6 +16,10 @@ Parameters:
   LakeBucketName:
     Type: String
     Description: "REQUIRED: Lake Bucket name"
+  
+  MarketCategory:
+    Type: String
+    Description: "REQUIRED: Market Category to pass on API request"
 
 Resources:
   CronFunction:
@@ -35,6 +39,7 @@ Resources:
         Variables:
           API_URL: !Ref ApiUrl
           LAKE_BUCKET_NAME: !Ref LakeBucketName
+          MARKET_CATEGORY: !Ref MarketCategory
       Policies:
         Statement:
           - Effect: Allow
