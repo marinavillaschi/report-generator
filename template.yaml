@@ -23,7 +23,7 @@ Resources:
     Properties:
       Description: Makes an API request on a schedule and uploads data to S3
       CodeUri: functions/cron/
-      Handler: data_fetcher.lambda_handler
+      Handler: main.lambda_handler
       Timeout: 60
       Events:
         DailySchedule:
@@ -54,7 +54,7 @@ Resources:
   S3Function:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Reads new data from S3 and generates report to send as email
+      Description: Reads new data from S3 and triggers glue crawler
       CodeUri: functions/s3/
       Handler: main.lambda_handler
       Timeout: 60
