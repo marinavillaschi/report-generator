@@ -20,19 +20,15 @@ This project has two main cores:
 
 ### 1. Cron based data fetcher lambda service
 
-AWS Lambda service that runs on a schedule to fetch data from external API and upload it to an S3 data lake landing zone.
+AWS Lambda service that runs on a schedule to fetch data from external API and upload it to an S3 data lake landing zone (raw).
 
 ### 2. Event based report generator lambda service
 
-AWS Lambda service that runs based on the event of new data landing on an S3 data lake zone to generate a report and send it as an email to the person of interest.
+AWS Lambda service that runs based on the event of new data landing on the raw zone of the S3 data lake invoke a glue crawler so that our data is available to be queried from Athena.
 
 ### TODO:
 
-- Call s3 uploader in lambda1 for each datapoint for a better glue database schema
-
-- Evaluate the need for the lambda2: it may be replaced by the glue services
-
-- Create glue crawler to run everytime new data comes in S3 to create/update glue database
+- Create glue crawler on template to run everytime new data comes in S3 to create/update glue database
 
 - Set up Athena for reading data from S3 using database created by crawler
 
