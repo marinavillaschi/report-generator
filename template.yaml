@@ -16,6 +16,14 @@ Parameters:
   LakeBucketName:
     Type: String
     Description: "REQUIRED: Lake Bucket name"
+  
+  MarketCategory:
+    Type: String
+    Description: "REQUIRED: Market Category to pass on API request"
+  
+  GlueCrawlerName:
+    Type: String
+    Description: "REQUIRED: Glue Crawler name to start when new data in S3"
 
 Resources:
   CronFunction:
@@ -35,6 +43,7 @@ Resources:
         Variables:
           API_URL: !Ref ApiUrl
           LAKE_BUCKET_NAME: !Ref LakeBucketName
+          MARKET_CATEGORY: !Ref MarketCategory
       Policies:
         Statement:
           - Effect: Allow
@@ -71,7 +80,7 @@ Resources:
                     Value: '.json'
       Environment:
         Variables:
-          LAKE_BUCKET_NAME: !Ref LakeBucketName
+          GLUE_CRAWLER_NAME: !Ref GlueCrawlerName
       Policies:
         Statement:
           - Effect: Allow
