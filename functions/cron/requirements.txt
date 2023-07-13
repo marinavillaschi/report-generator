@@ -1,3 +1,4 @@
 requests==2.31.0
 python-decouple==3.7
 boto3==1.26.153
+s3fs==2023.6.0
