@@ -2,7 +2,7 @@ import pandas as pd
 from decouple import config
 from datetime import date
 
-from services import api_requester
+from services import api_requester, s3_uploader
 
 LAKE_BUCKET_NAME = config("LAKE_BUCKET_NAME")
 MARKET_CATEGORY = config("MARKET_CATEGORY")
@@ -29,10 +29,12 @@ def lambda_handler(event, context):
 
     try:
         df = pd.DataFrame(coins_market_data)
-        s3_filepath = f"s3://{LAKE_BUCKET_NAME}/raw/coins_market_data/{MARKET_CATEGORY}/{str(date.today())}.csv"
 
-        df.to_csv(s3_filepath, index=False)
-        print(f"file {s3_filepath.split('/')[-1]} uploaded to S3 successfully!")
+        s3_uploader.upload_to_s3(
+            LAKE_BUCKET_NAME,
+            f"raw/coins_market_data/{MARKET_CATEGORY}/{str(date.today())}.csv",
+            df
+        )
 
     except Exception as e:
         raise Exception({
