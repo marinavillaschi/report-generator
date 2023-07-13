@@ -1,8 +1,8 @@
-import json
+import pandas as pd
 from decouple import config
 from datetime import date
 
-from services import api_requester, s3_uploader
+from services import api_requester
 
 LAKE_BUCKET_NAME = config("LAKE_BUCKET_NAME")
 MARKET_CATEGORY = config("MARKET_CATEGORY")
@@ -14,8 +14,8 @@ def lambda_handler(event, context):
     print("Attempting to fetch data from coingecko API")
 
     try:
-        coins_marked_data = api_requester.get_coins_market_data(vs_currency="USD", category=MARKET_CATEGORY)
-        coins_marked_data = coins_marked_data.json()
+        coins_market_data = api_requester.get_coins_market_data(vs_currency="USD", category=MARKET_CATEGORY)
+        coins_market_data = coins_market_data.json()
 
     except Exception as e:
         raise Exception({
@@ -24,21 +24,19 @@ def lambda_handler(event, context):
             "error": e
         })
 
-    print(f"got {len(coins_marked_data)} coin market data successfully")
-    print("Ready to upload them to S3!")
+    print(f"got {len(coins_market_data)} coin market data successfully")
+    print("Ready to upload it to S3!")
 
-    for i, data in enumerate(coins_marked_data):
-        print(f"\n{i+1}/{len(coins_marked_data)}")
+    try:
+        df = pd.DataFrame(coins_market_data)
+        s3_filepath = f"s3://{LAKE_BUCKET_NAME}/raw/coins_market_data/{MARKET_CATEGORY}/{str(date.today())}.csv"
 
-        try:
-            response_date = s3_uploader.upload_to_s3(
-                LAKE_BUCKET_NAME,
-                f"raw/coins_market_data/{MARKET_CATEGORY}/{str(date.today())}/{i+1}.json",
-                coins_marked_data
-            )
+        df.to_csv(s3_filepath, index=False)
+        print(f"file {s3_filepath.split('/')[-1]} uploaded to S3 successfully!")
 
-        except:
-            raise Exception({
-                "statusCode": 500,
-                "body": json.dumps(f"FAILED uploading data to S3 on {response_date}"),
-            })
+    except Exception as e:
+        raise Exception({
+            "statusCode": 500,
+            "body": "FAILED uploading API data to S3",
+            "error": e
+        })
