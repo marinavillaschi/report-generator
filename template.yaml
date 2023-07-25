@@ -82,11 +82,4 @@ Resources:
         Variables:
           GLUE_CRAWLER_NAME: !Ref GlueCrawlerName
       Policies:
-        Statement:
-          - Effect: Allow
-            Action:
-              - s3:GetObject
-            Resource:
-              !Sub
-                - "arn:aws:s3:::${BucketName}/*"
-                - {BucketName: !Ref LakeBucketName}
+        - AWSGlueServiceRole
