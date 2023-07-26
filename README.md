@@ -28,7 +28,7 @@ AWS Lambda service that runs based on the event of new data landing on the raw z
 
 ### TODO:
 
-- Create glue crawler on template to run everytime new data comes in S3 to create/update glue database
+- ~~Create glue crawler on template to run everytime new data comes in S3 to create/update glue database~~ OK!
 
 - Set up Athena for reading data from S3 using database created by crawler
 
