@@ -24,7 +24,7 @@ AWS Lambda service that runs on a schedule to fetch data from external API and u
 
 ### 2. Event based report generator lambda service
 
-AWS Lambda service that runs based on the event of new data landing on the raw zone of the S3 data lake invoke a glue crawler so that our data is available to be queried from Athena.
+AWS Lambda service that runs based on the event of new data landing on the raw zone of the S3 data lake that will trigger a glue crawler so that our data is available to be queried from aws Athena.
 
 ### TODO:
 

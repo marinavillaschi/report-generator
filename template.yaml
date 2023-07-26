@@ -63,7 +63,7 @@ Resources:
   S3Function:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Reads new data from S3 and triggers glue crawler
+      Description: Reads new .csv data from S3 and triggers glue crawler
       CodeUri: functions/s3/
       Handler: main.lambda_handler
       Timeout: 60
@@ -77,7 +77,7 @@ Resources:
               S3Key:
                 Rules:
                   - Name: suffix
-                    Value: '.json'
+                    Value: '.csv'
       Environment:
         Variables:
           GLUE_CRAWLER_NAME: !Ref GlueCrawlerName
