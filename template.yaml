@@ -83,3 +83,58 @@ Resources:
           GLUE_CRAWLER_NAME: !Ref GlueCrawlerName
       Policies:
         - AWSGlueServiceRole
+
+  CoinsMarketCrawlerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "glue.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        ['arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole']
+      Policies:
+        -
+          PolicyName: "S3BucketAccessPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: 
+                  - "s3:GetObject"
+                  - "s3:PutObject"
+                Resource: 
+                  !Join
+                    - ''
+                    - - !GetAtt LakeBucket.Arn
+                      - "*"
+
+  CoinsMarketDatabase:
+    Type: AWS::Glue::Database
+    Properties: 
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: "coins-market-database"
+
+  CoinsMarketCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: "coins-market-crawler"
+      Description: Crawler for Coins Market Data in S3.
+      Role: !GetAtt CoinsMarketCrawlerRole.Arn
+      DatabaseName: !Ref CoinsMarketDatabase
+      SchemaChangePolicy: 
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "LOG"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"},\"Tables\":{\"AddOrUpdateBehavior\":\"MergeNewColumns\"}}}"
+      Targets: 
+        S3Targets:
+          - Path: !Sub "${LakeBucket}/raw/coins_market_data/finance-banking"
