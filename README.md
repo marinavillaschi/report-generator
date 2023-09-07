@@ -69,7 +69,7 @@ To reproduce it, you need to:
 
 - Deploy the application:
 
-    `sam deploy`
+    `sam deploy` or `sam deploy --guided` (to pass the env vars)
 
 You can find more details on SAM CLI commands [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-command-reference.html).
 
