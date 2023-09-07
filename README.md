@@ -49,6 +49,29 @@ Once this data is catalogued by AWS Glue it can be queried from AWS Athena.
 - Create dashboard to feed from data using Athena
 
 
+## How to run it
+
+This project was made using the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html).
+
+To reproduce it, you need to:
+
+- create a python 3.9 virtual environment (Python 3.9 needed):
+
+    `py -3.9 -m venv venv`
+
+- Validate the `template.yaml` file:
+
+    `sam validate` or `sam validate --lint`
+
+- Build the application:
+
+    `sam build`
+
+- Deploy the application:
+
+    `sam deploy`
+
+You can find more details on SAM CLI commands [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-command-reference.html).
 
 ## Author 
 
@@ -56,4 +79,3 @@ Once this data is catalogued by AWS Glue it can be queried from AWS Athena.
 
 ## Acknowledgements 
 [CoinGecko API](https://www.coingecko.com/pt/api) for the data provided.
-
